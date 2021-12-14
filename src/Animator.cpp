@@ -12,6 +12,10 @@ Animator::Animator(double init, double end, int frame) {
     m_maxFrame = frame;
 }
 
+Animator::~Animator() {
+
+}
+
 double Animator::play() {
     if (frame > m_maxFrame) {
         played = true;

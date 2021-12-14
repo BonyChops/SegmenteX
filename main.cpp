@@ -6,6 +6,7 @@
 #include "src/WindowManager.h"
 #include "src/KeyboardManager.h"
 #include "src/SceneManager.h"
+
 WindowManager *windowManager;
 SceneManager *sceneManager;
 
@@ -50,25 +51,25 @@ void Display() {
 }
 
 void Keyboard(unsigned char c, int x, int y) {
-    KeyboardManager::updateKeyboard((int) c, true);
+    KeyboardManager::updateKeyboard((int) c, Keyboard::KEY, true);
 }
 
 void KeyboardUp(unsigned char c, int x, int y) {
-    KeyboardManager::updateKeyboard((int) c, false);
+    KeyboardManager::updateKeyboard((int) c, Keyboard::KEY, false);
 }
 
 void Special(int c, int x, int y) {
-    KeyboardManager::updateKeyboard(c, true);
+    KeyboardManager::updateKeyboard(c, Keyboard::SPECIAL, true);
 }
 
 void SpecialUp(int c, int x, int y) {
-    KeyboardManager::updateKeyboard(c, false);
+    KeyboardManager::updateKeyboard(c, Keyboard::SPECIAL, false);
 }
 
 void Loop(int value) {
     typedef KeyboardManager K;
-    windowManager->clearWithColor(!K::getKeyboard('r') ? 0 : 255, !K::getKeyboard(GLUT_KEY_UP) ? 0 : 255,
-                                  !K::getKeyboard('b') ? 0 : 255);
+    windowManager->clearWithColor(!K::getKeyboard('r', Keyboard::KEY) ? 0 : 255, !K::getKeyboard(GLUT_KEY_UP, Keyboard::SPECIAL) ? 0 : 255,
+                                  !K::getKeyboard('b', Keyboard::KEY) ? 0 : 255);
     sceneManager->Draw();
     glFlush();
     glutSwapBuffers();

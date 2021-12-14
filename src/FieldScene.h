@@ -8,6 +8,7 @@
 #include "WindowManager.h"
 #include "Map.h"
 #include "Point.h"
+#include "Player.h"
 
 typedef Point P;
 
@@ -19,13 +20,13 @@ public:
 
     P fp(P p);
 
-    void Draw();
+    void Draw(float windowScale);
 
 private:
     P fieldP = {0, WINDOW_H - 20};
     WindowManager *w;
     Map *map;
-
+    Player *player;
 };
 
 #endif //PROG_GAME_FIELDSCENE_H

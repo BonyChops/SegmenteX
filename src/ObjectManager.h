@@ -22,16 +22,49 @@ typedef Point P;
 template<typename T, int S>
 class ObjectManager {
 public:
-    ObjectManager(){
-
+    ObjectManager() {
+        cout << "INIT" << endl;
     }
 
-    bool CheckCollision(P p) {
-        auto ite = find_if(begin(objects), end(objects), [p](auto o) { return o.collision->CheckCollision(p); });
-        return ite != end(objects);
-        for (int i = 0; i < objIndex; ++i) {
-
+    Collision *CheckCollision(Collision c) {
+        array<P, COLLISION_POINTS_ACCURATE> pArray = c.genP<COLLISION_POINTS_ACCURATE>();
+        int size = pArray.size();
+        for (int i = 0; i < size; ++i) {
+            Collision *result = CheckCollision(pArray.at(i));
+            if (result->getType() != Collision::INVALID_COLLISION) {
+                return result;
+            }
         }
+        return new Collision(Collision::INVALID_COLLISION, (P) {0, 0}, (P) {0, 0});
+    }
+
+    bool CheckCollisionWithBool(Collision c) {
+        array<P, COLLISION_POINTS_ACCURATE> pArray = c.genP<COLLISION_POINTS_ACCURATE>();
+        int size = pArray.size();
+        for (int i = 0; i < size; ++i) {
+            bool result = CheckCollisionWithBool(pArray.at(i));
+            if (result) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    Collision *CheckCollision(P p) {
+        //auto ite = find_if(begin(objects), end(objects), [p](auto o) { return o.collision->CheckCollision(p); });
+        //return ite != end(objects);
+        for (int i = 0; i < objIndex; ++i) {
+            Collision *collision = objects.at(i).collision;
+            if (collision->CheckCollision(p)) {
+                return collision;
+            }
+        }
+        return new Collision(Collision::INVALID_COLLISION, (P) {0, 0}, (P) {0, 0});
+    }
+
+    bool CheckCollisionWithBool(P p) {
+        Collision *result = CheckCollision(p);
+        return result->getType() != Collision::INVALID_COLLISION;
     }
 
     void addObject(T object) {
@@ -45,7 +78,7 @@ public:
 
     void drawAll(function<P(P)> fp, float scale) {
         for (int i = 0; i < objIndex; ++i) {
-          objects.at(i).draw(fp, scale);
+            objects.at(i).draw(fp, scale);
         }
         //for_each(begin(objects), end(objects), [fp, scale](T o) { o.draw(fp, scale); });
     }

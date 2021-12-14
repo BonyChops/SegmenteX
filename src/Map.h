@@ -10,17 +10,33 @@
 #include <functional>
 
 using namespace std;
+
 class Map {
 public:
-    Map(){
+    Map() {
         blockManager = new ObjectManager<Block, 10000>;
-        blockManager->addObject(Block((P){0, 0}));
+        for (int i = 0; i < 19; ++i) {
+            blockManager->addObject(Block((P) {(float) i, 0}));
+        }
+        blockManager->addObject(Block((P) {2, 1}));
+        blockManager->addObject(Block((P) {2, 2}));
+        blockManager->addObject(Block((P) {2, 3}));
+        for (int i = 0; i < 100; ++i) {
+            blockManager->addObject(Block((P) {(float)i, (float)-i}));
+        }
     }
-    ~Map(){
-        delete blockManager;
+
+    ~Map() {
+        //TODO: Segmentation Fault
+        //delete blockManager;
+
     }
 
     void drawAll(function<P(P)> fp, float scale);
+
+    Collision *CheckCollision(Collision c);
+
+    bool CheckCollisionWithBool(Collision c);
 
 
 private:

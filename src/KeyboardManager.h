@@ -13,27 +13,26 @@ using namespace std;
 
 class KeyboardManager{
 public:
-    static bool getKeyboard(int c){
-        auto ite = find_if( KeyboardManager::keyboard.begin(), KeyboardManager::keyboard.end(), [c](Keyboard k){return k.getC() == c;} );
+    static bool getKeyboard(int c, Keyboard::Type type){
+        auto ite = find_if( KeyboardManager::keyboard.begin(), KeyboardManager::keyboard.end(), [c, type](Keyboard k){return k.getC() == c && k.getType() == type;} );
         if( ite != keyboard.end() ){
             return ite->status;
         }
         return false;
     }
 
-    static void updateKeyboard(int c, bool status){
-        auto ite = find_if( keyboard.begin(), keyboard.end(), [c](Keyboard k){return k.getC() == c;} );
+    static void updateKeyboard(int c,Keyboard::Type type, bool status){
+        auto ite = find_if( keyboard.begin(), keyboard.end(), [c, type](Keyboard k){return k.getC() == c && k.getType() == type;} );
         if( ite != keyboard.end() ){
             ite->status = status;
             return;
         }
-        Keyboard k(c, status);
+        Keyboard k(c, type, status);
         keyboard.push_back(k);
     }
 
     static list<Keyboard> keyboard;
 };
-list<Keyboard> KeyboardManager::keyboard;
 
 
 #endif //PROG_GAME_KEYBOARDMANAGER_H

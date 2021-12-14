@@ -15,12 +15,16 @@ class Object {
 public:
 
     virtual ~Object() {
-        //delete collision;
+       if(!invalid){
+           //TODO: Segmentation Fault
+           //delete collision;
+       }
     }
 
     virtual void draw(function<P(P)> fp, float scale) = 0;
 
     Collision *collision;
+    bool invalid = false;
 };
 
 #endif //PROG_GAME_OBJECT_H

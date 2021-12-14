@@ -19,7 +19,8 @@ public:
     P p;
 
     Block(){
-        Block((P){0, 0});
+        //Block((P){0, 0});
+        invalid = true;
     }
 
 
@@ -29,17 +30,17 @@ public:
     }
 
     ~Block(){
-        delete collision;
     }
 
 
     void draw(function<P(P)> fp, float scale) {
         Image rc = RCM::GetImage("../images/objects/block.png");
+        //cout << scale << endl;
         P bufP = (fp((P) {
-                .x = p.x * scale,
-                .y = p.y * scale
+                .x = p.x  * BLOCK_RC_SIZE ,
+                .y = p.y  * BLOCK_RC_SIZE
         }));
-        rc.putSprite(bufP.x, bufP.y, scale / BLOCK_RC_SIZE);
+        rc.putSprite(bufP, scale / BLOCK_RC_SIZE);
     }
 
 };

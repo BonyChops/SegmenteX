@@ -8,9 +8,12 @@
 #include <GL/glpng.h>
 #include <GL/glut.h>
 #include <math.h>
+#include "Point.h"
 
 #include <iostream>
 #include <string>
+
+typedef Point P;
 
 using namespace std;
 
@@ -35,21 +38,21 @@ public:
         }
     }
 
-    void putSprite(int x, int y) {
-        putSprite(x, y, 1.0);
+    void putSprite(P p) {
+        putSprite(p, 1.0);
     }
-    void putSprite(int x, int y, double scale) {
-        putSprite(x, y, scale, 0.0);
+    void putSprite(P p, double scale) {
+        putSprite(p, scale, 0.0);
     }
-    void putSprite(int x, int y, double scale, double angle) {
-        putSprite(x, y, scale, angle, 255);
+    void putSprite(P p, double scale, double angle) {
+        putSprite(p, scale, angle, 255);
     }
 
-    void putSprite(int posX, int posY, double scale, double angle, int alpha) {
-        m_x = posX;
-        m_y = posY;
-        int w = info.Width * scale;
-        int h = info.Height * scale;
+    void putSprite(P pos, double scale, double angle, int alpha) {
+        m_x = pos.x;
+        m_y = pos.y;
+        double w = (double)info.Width * scale;
+        double h = (double)info.Height * scale;
 
         glPushMatrix();
         glEnable(GL_TEXTURE_2D);
@@ -59,25 +62,33 @@ public:
         glBegin(GL_QUADS);
 
         glTexCoord2i(0, 0);
-        double x, y;
-        x = (double)w * -1.0 / 2.0;
-        y = (double)h * -1.0 / 2.0;
-        glVertex2i(px((int)(x * cos(angle) - y * sin(angle))), py((int)(x * sin(angle) + y * cos(angle))));
+        float x, y;
+        P p;
+        x = 0;
+        y = 0;
+        p = pCalc((P){(float)x, (float)y});
+        glVertex2f(p.x, p.y);
 
         glTexCoord2i(0, 1);
-        x = (double)w * -1.0 / 2.0;
-        y = (double)h * 1.0 / 2.0;
-        glVertex2i(px((int)(x * cos(angle) - y * sin(angle))), py((int)(x * sin(angle) + y * cos(angle))));
+        x = 0;
+        y = h;
+        p = pCalc((P){(float)x, (float)y});
+        glVertex2f(p.x, p.y);
+
 
         glTexCoord2i(1, 1);
-        x = (double)w * 1.0 / 2.0;
-        y = (double)h * 1.0 / 2.0;
-        glVertex2i(px((int)(x * cos(angle) - y * sin(angle))), py((int)(x * sin(angle) + y * cos(angle))));
+        x = w;
+        y = h;
+        p = pCalc((P){(float)x, (float)y});
+        glVertex2f(p.x, p.y);
+
 
         glTexCoord2i(1, 0);
-        x = (double)w * 1.0 / 2.0;
-        y = (double)h * -1.0 / 2.0;
-        glVertex2i(px((int)(x * cos(angle) - y * sin(angle))), py((int)(x * sin(angle) + y * cos(angle))));
+        x = w;
+        y = 0;
+        p = pCalc((P){(float)x, (float)y});
+        glVertex2f(p.x, p.y);
+
 
         glEnd();
 
@@ -86,8 +97,16 @@ public:
     }
 
 private:
-    int m_x;
-    int m_y;
+    float m_x;
+    float m_y;
+
+    P pCalc(P p){
+        return (P){
+            .x = p.x + m_x,
+            .y = p.y + m_y
+        };
+    }
+
     int px(int x) {
         return x + m_x;
     }

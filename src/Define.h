@@ -5,10 +5,16 @@
 #ifndef PROG_GAME_DEFINE_H
 #define PROG_GAME_DEFINE_H
 
-#define FRAME 20
+#define FRAME 5
 #define WINDOW_W 640
 #define WINDOW_H 480
 
+#define COLLISION_POINTS_ACCURATE 8
+#define COLLISION_CALC_ACCURATE 1
+
 #define IMAGE_MAX 10000
+
+#define DEBUG true
+
 
 #endif //PROG_GAME_DEFINE_H

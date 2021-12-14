@@ -12,14 +12,22 @@ using namespace std;
 class Keyboard{
 public:
     bool status = false;
-
-    Keyboard(int c, bool status){
+    enum Type{
+        KEY,
+        SPECIAL
+    };
+    Keyboard(int c, enum Type type, bool status){
         this->c = c;
         this->status = status;
+        this->type = type;
     }
 
     int getC(){
         return this->c;
+    }
+
+    enum Type getType(){
+        return this->type;
     }
 
     void setC(char c){
@@ -28,6 +36,7 @@ public:
 
 private:
     char c;
+    enum Type type;
 };
 
 #endif //PROG_GAME_KEYBOARD_H

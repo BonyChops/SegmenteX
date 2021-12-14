@@ -11,36 +11,49 @@
 #include "WindowManager.h"
 #include "Map.h"
 #include "FieldScene.h"
+
 using namespace std;
 
 FieldScene::FieldScene(WindowManager *windowManager) {
     this->w = windowManager;
     this->map = new Map;
+    this->player = new Player(*this->map);
 }
 
 FieldScene::~FieldScene() {
-    delete w;
-    delete map;
+    //TODO: Segmentation Fault
+    //delete w;
+    //delete map;
+    //delete player;
 }
 
 P FieldScene::fp(P p) {
     return w->winP((P) {
-            .x = p.x + fieldP.x,
-            .y = p.y + fieldP.y
+            .x = fieldP.x + p.x,
+            .y = fieldP.y - p.y
     });
 }
 
-void FieldScene::Draw() {
+void FieldScene::Draw(float windowScale) {
     glColor3ub(255, 255, 255);
-    Drawer::Square(
-            fp((P) {0, 0}), fp((P) {500, 100})
-    );
+
     function<P(P)> fpl = [this](P p) {
         return w->winP((P) {
-                .x = p.x + fieldP.x,
-                .y = p.y + fieldP.y
+                .x = fieldP.x + p.x,
+                .y = fieldP.y - p.y
         });
     };
-    map->drawAll(fpl, 32);
-
+    map->drawAll(fpl, 32 * windowScale);
+    player->draw(fpl, 32 * windowScale, true);
+    fieldP = (P){
+            player->p.x * windowScale * BLOCK_RC_SIZE > WINDOW_W / 2 ? -player->p.x * windowScale * BLOCK_RC_SIZE + (WINDOW_W / 2) : 0,
+            player->p.y * windowScale * BLOCK_RC_SIZE + (WINDOW_H / 2),
+    };
+    fpl = [this](P p) {
+        return w->winP((P) {
+                .x = fieldP.x + p.x,
+                .y = fieldP.y - p.y
+        });
+    };
+    player->drawResource(fpl, 32 * windowScale);
 }
