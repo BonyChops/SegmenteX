@@ -14,7 +14,7 @@
 
 #define IMAGE_MAX 10000
 
-#define DEBUG true
+#define DEBUG false
 
 
 #endif //PROG_GAME_DEFINE_H

@@ -67,8 +67,8 @@ void Player::draw(function<P(P)> fp, float scale, bool skipResource) {
 void Player::drawResource(function<P(P)> fp, float scale) {
     Image rc = RCM::GetImage("../images/objects/player.png");
     rc.putSprite(fp((P) {
-            .x = p.x * BLOCK_RC_SIZE,
-            .y = p.y * BLOCK_RC_SIZE
+            .x = p.x,
+            .y = p.y
     }), scale / BLOCK_RC_SIZE);
     if (DEBUG) {
         array<P, COLLISION_POINTS_ACCURATE> points = collision->genP<COLLISION_POINTS_ACCURATE>();

@@ -37,8 +37,8 @@ public:
         Image rc = RCM::GetImage("../images/objects/block.png");
         //cout << scale << endl;
         P bufP = (fp((P) {
-                .x = p.x  * BLOCK_RC_SIZE ,
-                .y = p.y  * BLOCK_RC_SIZE
+                .x = p.x  ,
+                .y = p.y
         }));
         rc.putSprite(bufP, scale / BLOCK_RC_SIZE);
     }
