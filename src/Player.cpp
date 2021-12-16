@@ -44,6 +44,7 @@ void Player::draw(function<P(P)> fp, float scale, bool skipResource) {
     }
     float tmpx = 0;
     tmpx += KBM::getKeyboard('a', Keyboard::KEY) ? -0.0002 : 0;
+
     tmpx += KBM::getKeyboard('d', Keyboard::KEY) ? 0.0002 : 0;
     if (ph->x.v > 0.01) {
         ph->x.v = 0.01;

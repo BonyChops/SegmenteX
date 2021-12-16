@@ -26,36 +26,13 @@ public:
     P p1 = {0, 0};
     P p2 = {0, 0};
 
-    Collision() {
-        Collision(INVALID_COLLISION, (P) {0, 0}, (P) {0, 0});
-    }
+    Collision();
 
-    Collision(enum Type type, P p1, P p2) {
-        this->type = type;
-        this->p1 = p1;
-        this->p2 = p2;
-    }
+    Collision(enum Type type, P p1, P p2);
 
-    bool CheckCollision(P p) {
-        return CoodinateUtils::IsInsideBox(p, p1, p2);
-    }
+    bool CheckCollision(P p);
 
-//    template<int A>
-//    array<P, A> genP() {
-//        array<P, A> tmp;
-//        for (int i = 0; i < A; ++i) {
-//            cout << p1.y << endl;
-//            P p1 = this->p1, p2 = this->p2;
-//            tmp[i] = (P) {
-//                    ((p2.x - p1.x) * i / (A - 1)) + p1.x,
-//                    ((p2.y - p1.y) * i / (A - 1)) + p1.y
-//            };
-//            cout << p1.y << endl;
-//        }
-//        return tmp;
-//    }
-    template<int A>
-    array<P, A> genP() {
+    template<int A> array<P, A> genP() {
         array<P, A> tmp{0};
         /*tmp[0] = (P){p1.x, p1.y};
         tmp[1] = (P){p1.x, p2.y};
@@ -106,18 +83,9 @@ public:
     }
 
 
-    enum Type getType() {
-        return type;
-    }
+    enum Type getType();
 
-    Collision duplicate() {
-        return Collision(type, p1, p2);
-    }
-
-    void updateP(P p1, P p2) {
-        this->p1 = p1;
-        this->p2 = p2;
-    }
+    void updateP(P p1, P p2);
 
 private:
     enum Type type = SQUARE;

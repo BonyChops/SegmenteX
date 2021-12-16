@@ -43,6 +43,8 @@ public:
         rc.putSprite(bufP, scale / BLOCK_RC_SIZE);
     }
 
+    Collision *collision;
+
 };
 
 #endif //PROG_GAME_BLOCK_H

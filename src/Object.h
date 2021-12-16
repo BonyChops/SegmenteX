@@ -6,6 +6,7 @@
 #define PROG_GAME_OBJECT_H
 
 #include "Collision.h"
+#include "CollisionManager.h"
 #include <functional>
 
 using namespace std;
@@ -13,6 +14,11 @@ using namespace std;
 class Object {
 
 public:
+
+    enum Type{
+        BLOCK,
+        INVALID
+    };
 
     virtual ~Object() {
        if(!invalid){
@@ -22,9 +28,13 @@ public:
     }
 
     virtual void draw(function<P(P)> fp, float scale) = 0;
+    bool isCableAttachable();
+    enum Type getType();
 
-    Collision *collision;
     bool invalid = false;
+private:
+    enum Type type = INVALID;
+    bool cableAttachable = false;
 };
 
 #endif //PROG_GAME_OBJECT_H
