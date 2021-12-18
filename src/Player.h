@@ -11,7 +11,7 @@
 class Player {
 public:
     Player();
-    Player(Map map);
+    Player(Map *map);
     ~Player();
 
     Physics *ph;
@@ -22,7 +22,7 @@ public:
     void drawResource(function<P(P)> fp, float scale);
 
 private:
-    Map map;
+    Map* map;
     Collision *collision;
     function<P(P)> fp;
     bool valid = true;

@@ -5,7 +5,11 @@
 #include "Object.h"
 
 bool Object::isCableAttachable() {
-    return cableAttachable;
+    return false;
+}
+
+void Object::draw(function<P(P)> fp, float scale) {
+    return;
 }
 
 enum Object::Type Object::getType() {

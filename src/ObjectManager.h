@@ -54,10 +54,13 @@ public:
         //auto ite = find_if(begin(objects), end(objects), [p](auto o) { return o.collision->CheckCollision(p); });
         //return ite != end(objects);
         for (int i = 0; i < objIndex; ++i) {
-            Collision *collision = objects.at(i).collision;
+            //for(Collision collision : objects.at(i).collision.getCollisions()){
+            Collision* collision = objects.at(i).collision;
             if (collision->CheckCollision(p)) {
                 return collision;
             }
+            //}
+
         }
         return new Collision(Collision::INVALID_COLLISION, (P) {0, 0}, (P) {0, 0});
     }
@@ -81,6 +84,14 @@ public:
             objects.at(i).draw(fp, scale);
         }
         //for_each(begin(objects), end(objects), [fp, scale](T o) { o.draw(fp, scale); });
+    }
+
+    T at(int index) {
+        return objects.at(index);
+    }
+
+    T *ats(int index) {
+        return &objects[index];
     }
 
 

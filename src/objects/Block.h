@@ -6,17 +6,13 @@
 #ifndef PROG_GAME_BLOCK_H
 #define PROG_GAME_BLOCK_H
 
-#define BLOCK_RC_SIZE 32
-
+#include "../Define.h"
 #include "../Object.h"
-#include "../ResourceManager.h"
 #include <functional>
 
-typedef ResourceManager RCM;
 
 class Block : public Object {
 public:
-    P p;
 
     Block(){
         //Block((P){0, 0});
@@ -25,6 +21,7 @@ public:
 
 
     Block(P p) : Object(){
+        type = BLOCK;
         collision = new Collision(Collision::SQUARE, (P) {p.x, p.y}, (P) {p.x + 1, p.y + 1});
         this->p = p;
     }
@@ -33,7 +30,7 @@ public:
     }
 
 
-    void draw(function<P(P)> fp, float scale) {
+    void draw(function<P(P)> fp, float scale) override{
         Image rc = RCM::GetImage("../images/objects/block.png");
         //cout << scale << endl;
         P bufP = (fp((P) {

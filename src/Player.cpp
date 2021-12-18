@@ -15,11 +15,11 @@ Player::Player() {
     valid = false;
 }
 
-Player::Player(Map map) {
+Player::Player(Map* map) {
     this->map = map;
     p = {0, 5};
     collision = new Collision(Collision::SQUARE, (P) {p.x, p.y + 1}, (P) {p.x + 1, p.y - 1});
-    ph = new Physics(collision, p, &map);
+    ph = new Physics(collision, p, map);
     ph->y.a = -0.00005;
     ph->y.v = 0.030;
     ph->x.v = 0.0100;
@@ -43,9 +43,9 @@ void Player::draw(function<P(P)> fp, float scale, bool skipResource) {
         ph->y.v = 0.02;
     }
     float tmpx = 0;
-    tmpx += KBM::getKeyboard('a', Keyboard::KEY) ? -0.0002 : 0;
-
-    tmpx += KBM::getKeyboard('d', Keyboard::KEY) ? 0.0002 : 0;
+    bool shiftPressed = KBM::getKeyboard(SHIFT_KEY, Keyboard::SPECIAL);
+    tmpx += KBM::getKeyboard('a', Keyboard::KEY) ? (shiftPressed ? -0.0002 : -0.0004) : 0;
+    tmpx += KBM::getKeyboard('d', Keyboard::KEY) ? (shiftPressed ? 0.0002 : 0.0004) : 0;
     if (ph->x.v > 0.01) {
         ph->x.v = 0.01;
     }
@@ -56,6 +56,10 @@ void Player::draw(function<P(P)> fp, float scale, bool skipResource) {
     ph->x.a = tmpx;
     if (tmpx == 0 && ph->y.v == 0) {
         ph->x.v = 0;
+    }
+    if(KBM::getKeyboard('s', Keyboard::KEY)){
+        ph->x.v = 0;
+        ph->y.v = -0.03;
     }
     P p = this->ph->calc();
 

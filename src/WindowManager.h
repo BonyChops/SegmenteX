@@ -68,15 +68,6 @@ public:
         glEnd();
     }
 
-    void drawLine(double x1, double y1, double x2, double y2) {
-        int length = (int) sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-        Animator xLiner(x1, x2, length);
-        Animator yLiner(y1, y2, length);
-        for (int i = 0; i < length; i++) {
-            glVertex2i((int) xLiner.play(), (int) yLiner.play());
-        }
-    }
-
     P winP(P p) {
         float w, h;
         if (((float)m_windowW / (float)WINDOW_W) < ((float)m_windowH/(float)WINDOW_H)) {

@@ -8,31 +8,37 @@
 #include "Collision.h"
 #include "CollisionManager.h"
 #include <functional>
+#include "ResourceManager.h"
+
+typedef ResourceManager RCM;
 
 using namespace std;
 
 class Object {
 
 public:
-
+    P p;
     enum Type{
+        INVALID,
         BLOCK,
-        INVALID
+        KEY_INPUT,
+        SEGMENT,
+        CABLE
     };
 
-    virtual ~Object() {
+    ~Object() {
        if(!invalid){
            //TODO: Segmentation Fault
            //delete collision;
        }
     }
 
-    virtual void draw(function<P(P)> fp, float scale) = 0;
-    bool isCableAttachable();
+    virtual void draw(function<P(P)> fp, float scale);
+    virtual bool isCableAttachable();
     enum Type getType();
 
     bool invalid = false;
-private:
+protected:
     enum Type type = INVALID;
     bool cableAttachable = false;
 };

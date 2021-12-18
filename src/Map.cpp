@@ -8,6 +8,8 @@ void Map::drawAll(function<P(P)> fp, float scale) {
     //cout << scale << endl;
     P test = fp((P) {0, 0});
     blockManager->drawAll(fp, scale);
+    keyInputManager->drawAll(fp, scale);
+    segmentManager->drawAll(fp, scale);
 }
 
 Collision *Map::CheckCollision(Collision c) {

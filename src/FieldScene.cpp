@@ -17,7 +17,7 @@ using namespace std;
 FieldScene::FieldScene(WindowManager *windowManager) {
     this->w = windowManager;
     this->map = new Map;
-    this->player = new Player(*this->map);
+    this->player = new Player(this->map);
 }
 
 FieldScene::~FieldScene() {

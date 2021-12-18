@@ -64,6 +64,7 @@ void Special(int c, int x, int y) {
 
 void SpecialUp(int c, int x, int y) {
     KeyboardManager::updateKeyboard(c, Keyboard::SPECIAL, false);
+    cout << c << endl;
 }
 
 void Loop(int value) {

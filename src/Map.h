@@ -6,7 +6,10 @@
 #define PROG_GAME_MAP_H
 
 #include "objects/Block.h"
+#include "objects/KeyInput.h"
+#include "objects/Segment.h"
 #include "ObjectManager.h"
+#include "CableAttachableObject.h"
 #include <functional>
 
 using namespace std;
@@ -15,6 +18,17 @@ class Map {
 public:
     Map() {
         blockManager = new ObjectManager<Block, 10000>;
+        keyInputManager = new ObjectManager<KeyInput, 10000>;
+        keyInputManager->addObject(KeyInput((P){2, 4}, 'h'));
+        segmentManager = new ObjectManager<Segment, 10000>;
+        for (int i = 1; i < 10; ++i) {
+            segmentManager->addObject(Segment((P){(float)2 + i * 2, (float)4 - (i % 2 == 0 ? 2 : 0)}));
+            if(i == 1){
+                keyInputManager->ats(0)->attachCable((CableAttachableObject *)segmentManager->ats(i));
+            }else{
+                segmentManager->ats(i - 1)->attachCable((CableAttachableObject *)segmentManager->ats(i));
+            }
+        }
         for (int i = 0; i < 19; ++i) {
             blockManager->addObject(Block((P) {(float) i, 0}));
         }
@@ -41,6 +55,8 @@ public:
 
 private:
     ObjectManager<Block, 10000> *blockManager;
+    ObjectManager<KeyInput, 10000> *keyInputManager;
+    ObjectManager<Segment, 10000> *segmentManager;
 };
 
 #endif //PROG_GAME_MAP_H

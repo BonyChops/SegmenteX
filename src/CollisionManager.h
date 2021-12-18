@@ -12,6 +12,7 @@
 
 template<int T>
 class CollisionManager {
+public:
     CollisionManager(){
         collisions = GameArray<Collision, T>();
     }
@@ -31,6 +32,10 @@ class CollisionManager {
 
     void addCollision(Collision c){
         collisions.push(c);
+    }
+
+    GameArray<Collision, T> getCollisions(){
+        return collisions;
     }
 
 
