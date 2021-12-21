@@ -15,11 +15,15 @@
 #include "Point.h"
 #include <functional>
 #include "objects/Block.h"
+#include <variant>
 
 using namespace std;
 typedef Point P;
 
-template<typename T, int S>
+typedef variant<Block, Segment, Cable> AllObject;
+
+//template<typename T, int S>
+template<int S>
 class ObjectManager {
 public:
     ObjectManager() {
@@ -54,14 +58,26 @@ public:
         //auto ite = find_if(begin(objects), end(objects), [p](auto o) { return o.collision->CheckCollision(p); });
         //return ite != end(objects);
         for (int i = 0; i < objIndex; ++i) {
-            //for(Collision collision : objects.at(i).collision.getCollisions()){
-            Collision* collision = objects.at(i).collision;
-            if (collision->CheckCollision(p)) {
-                return collision;
-            }
-            //}
+            //for (Collision* collision: objects.at(i).collisions.getCollisions()) {
+            Collision *c = std::visit([p](auto object) {
+                GameArray<Collision, COLLISIONS_PER_OBJECT> *collisions = object.collisions.getCollisions();
 
+                for (auto i = collisions->begin(); i != collisions->end(); ++i) {
+                    Collision *collision = &*i;
+                    //Collision *collision = objects.at(i).collision;
+                    if (collision->CheckCollision(p)) {
+                        return collision;
+                    }
+                }
+
+               return new Collision(Collision::INVALID_COLLISION, (P){0, 0}, (P){0, 0});
+            }, objects[i]);
+            if(c->getType() != Collision::INVALID_COLLISION){
+                return c;
+            }
         }
+
+
         return new Collision(Collision::INVALID_COLLISION, (P) {0, 0}, (P) {0, 0});
     }
 
@@ -70,9 +86,9 @@ public:
         return result->getType() != Collision::INVALID_COLLISION;
     }
 
-    void addObject(T object) {
+    void addObject(AllObject object) {
         if (objIndex >= S) {
-            cerr << "[!]MAXIMUM SIZE OF " << typeid(T).name() << "(" << S << ")" << " REACHED!!";
+            cerr << "[!]MAXIMUM SIZE OF " << typeid(Object).name() << "(" << S << ")" << " REACHED!!";
             return;
         }
         objects[objIndex] = object;
@@ -81,22 +97,33 @@ public:
 
     void drawAll(function<P(P)> fp, float scale) {
         for (int i = 0; i < objIndex; ++i) {
-            objects.at(i).draw(fp, scale);
+            std::visit([fp, scale](auto object) { object.draw(fp, scale); }, objects[i]);
+            //object.draw(fp, scale);
         }
         //for_each(begin(objects), end(objects), [fp, scale](T o) { o.draw(fp, scale); });
     }
 
+    template<class T>
     T at(int index) {
-        return objects.at(index);
+        if (auto p = std::get_if<T>(&objects[index])) {  // ポインタで渡す
+            return *p;
+        }
+        return nullptr;
+        //return objects.at(index);
     }
 
+    template<class T>
     T *ats(int index) {
-        return &objects[index];
+        if (auto p = std::get_if<T>(&objects[index])) {  // ポインタで渡す
+            return p;
+        }
+        return nullptr;
     }
 
 
 private:
-    array<T, S> objects;
+    //array<Object, S> objects;
+    array<AllObject, S> objects;
     // Object objects[10000];
     int objIndex = 0;
 };
