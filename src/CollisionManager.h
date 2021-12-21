@@ -34,8 +34,8 @@ public:
         collisions.push(c);
     }
 
-    GameArray<Collision, T> getCollisions(){
-        return collisions;
+    GameArray<Collision, T> *getCollisions(){
+        return &collisions;
     }
 
 

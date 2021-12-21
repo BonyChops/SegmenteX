@@ -22,7 +22,7 @@ public:
 
     Block(P p) : Object(){
         type = BLOCK;
-        collision = new Collision(Collision::SQUARE, (P) {p.x, p.y}, (P) {p.x + 1, p.y + 1});
+        collisions.getCollisions()->push(Collision(Collision::SQUARE, (P) {p.x, p.y}, (P) {p.x + 1, p.y + 1}));
         this->p = p;
     }
 
@@ -40,7 +40,6 @@ public:
         rc.putSprite(bufP, scale / BLOCK_RC_SIZE);
     }
 
-    Collision *collision;
 
 };
 

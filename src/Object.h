@@ -36,7 +36,7 @@ public:
     virtual void draw(function<P(P)> fp, float scale);
     virtual bool isCableAttachable();
     enum Type getType();
-
+    CollisionManager<COLLISIONS_PER_OBJECT> collisions;
     bool invalid = false;
 protected:
     enum Type type = INVALID;

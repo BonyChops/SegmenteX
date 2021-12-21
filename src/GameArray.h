@@ -13,6 +13,7 @@ class GameArray {
 public:
     GameArray() {
         this->objectArray = std::array<T, S>();
+        index = 0;
     }
 
     GameArray(T o) {
@@ -30,6 +31,10 @@ public:
 
     int getMax() {
         return index;
+    }
+
+    T* atp(int index){
+        return &objectArray[index];
     }
 
     Iterator<T> begin() { return Iterator<T>(&objectArray.at(0)); }

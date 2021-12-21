@@ -19,7 +19,5 @@
 
 #define DEBUG false
 
-
-
 #define SHIFT_KEY 112
 #endif //PROG_GAME_DEFINE_H
