@@ -24,7 +24,7 @@ Total : 31 files,  877 codes, 97 comments, 305 blanks, all 1279 lines
 | [src/FieldScene.h](/src/FieldScene.h) | C++ | 20 | 3 | 10 | 33 |
 | [src/Image.h](/src/Image.h) | C++ | 86 | 5 | 29 | 120 |
 | [src/Keyboard.h](/src/Keyboard.h) | C++ | 30 | 3 | 10 | 43 |
-| [src/KeyboardManager.h](/src/KeyboardManager.h) | C++ | 28 | 3 | 9 | 40 |
+| [src/KeyboardManager.h](/src/KeyboardUtils.h) | C++ | 28 | 3 | 9 | 40 |
 | [src/Map.cpp](/src/Map.cpp) | C++ | 15 | 4 | 4 | 23 |
 | [src/Map.h](/src/Map.h) | C++ | 27 | 3 | 10 | 40 |
 | [src/Object.h](/src/Object.h) | C++ | 13 | 4 | 10 | 27 |

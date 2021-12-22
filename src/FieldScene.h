@@ -22,11 +22,14 @@ public:
 
     void Draw(float windowScale);
 
+    void drawGrid();
+
 private:
     P fieldP = {0, WINDOW_H - 20};
     WindowManager *w;
-    Map *map;
+    Map map;
     Player *player;
+    bool editorView = true;
 };
 
 #endif //PROG_GAME_FIELDSCENE_H

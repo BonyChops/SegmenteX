@@ -5,12 +5,22 @@
 #include "Animator.h"
 #include <iostream>
 
-Animator::Animator(double init, double end, int frame) {
+Animator::Animator() {
+    Animator(0.0, 0.0, 0);
+}
+
+Animator::Animator(double init, double end, int frame, bool timeMode) {
     m_init = init;
     m_state = init;
     m_end = end;
     m_maxFrame = frame;
+    this->timeMode = timeMode;
+    this->tm = TimeManager();
 }
+
+/*Animator::Animator(double init, double end, int frame) {
+    Animator(init, end, frame, false);
+}*/
 
 Animator::~Animator() {
 
@@ -22,7 +32,7 @@ double Animator::play() {
         return m_end;
     }
     double t = ((double) frame / (double) m_maxFrame);
-    frame += 1;
+    frame += (this->timeMode ? tm.deltaTime() : 1);
     switch (mode) {
         case A_LINER:
             return liner(t);

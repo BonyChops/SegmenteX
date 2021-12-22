@@ -41,6 +41,10 @@ public:
         Drawer::drawLine(fp(p), fp(target->getCableSocket()));
     }
 
+    void draw(function<P(P)> fp, float scale, bool editorView){
+        draw(fp, scale);
+    }
+
     void changePower(bool power){
         if(invalid || target == nullptr|| target->getType() == INVALID){
             return;

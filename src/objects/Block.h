@@ -8,6 +8,7 @@
 
 #include "../Define.h"
 #include "../Object.h"
+#include "../Animator.h"
 #include <functional>
 
 
@@ -20,7 +21,7 @@ public:
     }
 
 
-    Block(P p) : Object(){
+    Block(P p) : Object() , scaleAni(0.0, 1.0, 100, true) {
         type = BLOCK;
         collisions.getCollisions()->push(Collision(Collision::SQUARE, (P) {p.x, p.y}, (P) {p.x + 1, p.y + 1}));
         this->p = p;
@@ -29,6 +30,9 @@ public:
     ~Block(){
     }
 
+    void draw(function<P(P)> fp, float scale, bool editorView){
+        draw(fp, scale);
+    }
 
     void draw(function<P(P)> fp, float scale) override{
         Image rc = RCM::GetImage("../images/objects/block.png");
@@ -37,9 +41,11 @@ public:
                 .x = p.x  ,
                 .y = p.y
         }));
-        rc.putSprite(bufP, scale / BLOCK_RC_SIZE);
+        rc.putSprite(bufP, scale * ( (float)scaleAni.play()) / BLOCK_RC_SIZE);
     }
 
+private:
+    Animator scaleAni;
 
 };
 

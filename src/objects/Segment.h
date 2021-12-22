@@ -29,6 +29,10 @@ public:
         cout << "I am " << this << endl;
     }
 
+    void draw(function<P(P)> fp, float scale, bool editorView){
+        draw(fp, scale);
+    }
+
     ~Segment() {
     }
 

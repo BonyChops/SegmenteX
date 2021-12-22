@@ -95,9 +95,11 @@ public:
         objIndex += 1;
     }
 
-    void drawAll(function<P(P)> fp, float scale) {
+    void drawAll(function<P(P)> fp, float scale, bool editorView) {
         for (int i = 0; i < objIndex; ++i) {
-            std::visit([fp, scale](auto object) { object.draw(fp, scale); }, objects[i]);
+            std::visit([fp, scale, editorView](auto &object) { object.draw(fp, scale, editorView); }, objects[i]);
+            //auto *o = &objects[i];
+            //o->draw(fp, scale);
             //object.draw(fp, scale);
         }
         //for_each(begin(objects), end(objects), [fp, scale](T o) { o.draw(fp, scale); });
@@ -118,6 +120,16 @@ public:
             return p;
         }
         return nullptr;
+    }
+
+    bool CheckObject(P p){
+        for (int i = 0; i < objIndex; ++i) {
+            bool result = std::visit([p](auto &object) { object->p.x == p.x && object->p.y && p.y }, objects[i]);
+            if(result){
+                return result;
+            }
+        }
+        return false;
     }
 
 

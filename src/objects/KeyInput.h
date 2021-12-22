@@ -9,11 +9,11 @@
 #include "../Object.h"
 #include "../Image.h"
 #include "Cable.h"
-#include "../KeyboardManager.h"
+#include "../KeyboardUtils.h"
 #include "Cable.h"
 #include <string>
 
-typedef KeyboardManager KBM;
+typedef KeyboardUtils KBM;
 
 class KeyInput : public Object {
 public:
@@ -47,6 +47,10 @@ public:
             cable.changePower(power);
         }
         cable.draw(fp, scale);
+    }
+
+    void draw(function<P(P)> fp, float scale, bool editorView){
+        draw(fp, scale);
     }
 
     void attachCable(CableAttachableObject *object) {

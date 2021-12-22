@@ -24,18 +24,20 @@ public:
 
     }
 
-    void drawAll(function<P(P)> fp, float scale);
+    void drawAll(function<P(P)> fp, float scale, bool editorView);
 
     Collision *CheckCollision(Collision c);
 
     bool CheckCollisionWithBool(Collision c);
 
+    void addObject(AllObject object);
+
+    ObjectManager<10000> objectManager;
 
 private:
 //    ObjectManager<Block, 10000> *blockManager;
 //    ObjectManager<KeyInput, 10000> *keyInputManager;
 //    ObjectManager<Segment, 10000> *segmentManager;
-    ObjectManager<10000> objectManager;
 };
 
 #endif //PROG_GAME_MAP_H

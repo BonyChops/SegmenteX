@@ -14,11 +14,11 @@ typedef Point P;
 
 class SceneManager {
 public:
-    FieldScene *fieldScene;
+    FieldScene fieldScene;
 
-    SceneManager(WindowManager *windowManager) {
+    SceneManager(WindowManager *windowManager) : fieldScene(windowManager) {
         this->w = windowManager;
-        fieldScene = new FieldScene(windowManager);
+        //fieldScene = new FieldScene(windowManager);
     }
 
     ~SceneManager() {
@@ -42,7 +42,7 @@ public:
             windowScale = (float) w->m_windowH / (float) WINDOW_H;
         }
         //cout << windowScale << endl;
-        fieldScene->Draw(windowScale);
+        fieldScene.Draw(windowScale);
         edgeHandler();
     }
 

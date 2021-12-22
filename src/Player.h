@@ -19,6 +19,7 @@ public:
 
     void draw(function<P(P)> fp, float scale);
     void draw(function<P(P)> fp, float scale, bool skipResource);
+    void draw(function<P(P)> fp, float scale, bool skipResource, bool editorView);
     void drawResource(function<P(P)> fp, float scale);
 
 private:

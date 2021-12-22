@@ -4,7 +4,7 @@
 #include "src/Define.h"
 
 #include "src/WindowManager.h"
-#include "src/KeyboardManager.h"
+#include "src/KeyboardUtils.h"
 #include "src/SceneManager.h"
 
 WindowManager *windowManager;
@@ -51,26 +51,26 @@ void Display() {
 }
 
 void Keyboard(unsigned char c, int x, int y) {
-    KeyboardManager::updateKeyboard((int) c, Keyboard::KEY, true);
+    KeyboardUtils::updateKeyboard((int) c, Keyboard::KEY, true);
 }
 
 void KeyboardUp(unsigned char c, int x, int y) {
-    KeyboardManager::updateKeyboard((int) c, Keyboard::KEY, false);
+    KeyboardUtils::updateKeyboard((int) c, Keyboard::KEY, false);
 }
 
 void Special(int c, int x, int y) {
-    KeyboardManager::updateKeyboard(c, Keyboard::SPECIAL, true);
+    KeyboardUtils::updateKeyboard(c, Keyboard::SPECIAL, true);
 }
 
 void SpecialUp(int c, int x, int y) {
-    KeyboardManager::updateKeyboard(c, Keyboard::SPECIAL, false);
+    KeyboardUtils::updateKeyboard(c, Keyboard::SPECIAL, false);
     cout << c << endl;
 }
 
 void Loop(int value) {
-    typedef KeyboardManager K;
-    windowManager->clearWithColor(!K::getKeyboard('r', Keyboard::KEY) ? 0 : 255, !K::getKeyboard(GLUT_KEY_UP, Keyboard::SPECIAL) ? 0 : 255,
-                                  !K::getKeyboard('b', Keyboard::KEY) ? 0 : 255);
+    typedef KeyboardUtils K;
+//    windowManager->clearWithColor(!K::getKeyboard('r', Keyboard::KEY) ? 0 : 255, !K::getKeyboard(GLUT_KEY_UP, Keyboard::SPECIAL) ? 0 : 255,
+//                                  !K::getKeyboard('b', Keyboard::KEY) ? 0 : 255);
     sceneManager->Draw();
     glFlush();
     glutSwapBuffers();

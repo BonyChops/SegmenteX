@@ -34,6 +34,7 @@ public:
     }
 
     virtual void draw(function<P(P)> fp, float scale);
+    virtual void draw(function<P(P)> fp, float scale, bool editorView);
     virtual bool isCableAttachable();
     enum Type getType();
     CollisionManager<COLLISIONS_PER_OBJECT> collisions;

@@ -34,13 +34,13 @@ Map::Map() {
     }
 }
 
-void Map::drawAll(function<P(P)> fp, float scale) {
+void Map::drawAll(function<P(P)> fp, float scale, bool editorView) {
     //cout << scale << endl;
     P test = fp((P) {0, 0});
 //    blockManager->drawAll(fp, scale);
 //    keyInputManager->drawAll(fp, scale);
 //    segmentManager->drawAll(fp, scale);
-    objectManager.drawAll(fp, scale);
+    objectManager.drawAll(fp, scale, editorView);
     //Block block = Block((P){0, 0});
     //block.draw(fp, scale);
 }
@@ -56,4 +56,8 @@ Collision *Map::CheckCollision(Collision c) {
 
 bool Map::CheckCollisionWithBool(Collision c) {
     return objectManager.CheckCollisionWithBool(c);
+}
+
+void Map::addObject(AllObject object) {
+    objectManager.addObject(object);
 }
