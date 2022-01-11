@@ -23,7 +23,8 @@ public:
     WindowManager(int argc, char **argv) {
         //InitDisplay(argc, argv);
     }
-    ~WindowManager(){
+
+    ~WindowManager() {
         delete bufWindowManager;
     }
 
@@ -70,7 +71,7 @@ public:
 
     P winP(P p) {
         float w, h;
-        if (((float)m_windowW / (float)WINDOW_W) < ((float)m_windowH/(float)WINDOW_H)) {
+        if (((float) m_windowW / (float) WINDOW_W) < ((float) m_windowH / (float) WINDOW_H)) {
             h = m_windowW * WINDOW_H / WINDOW_W;
             w = m_windowW;
         } else {
@@ -80,6 +81,21 @@ public:
         return (P) {
                 .x = p.x * w / WINDOW_W + ((m_windowW - w) / 2),
                 .y = p.y * h / WINDOW_H + ((m_windowH - h) / 2)
+        };
+    }
+
+    P unwinP(P p) {
+        float w, h;
+        if (((float) m_windowW / (float) WINDOW_W) < ((float) m_windowH / (float) WINDOW_H)) {
+            h = m_windowW * WINDOW_H / WINDOW_W;
+            w = m_windowW;
+        } else {
+            h = m_windowH;
+            w = m_windowH * WINDOW_W / WINDOW_H;
+        }
+        return (P) {
+                (((m_windowW - w) / 2) - p.x) * -1 * WINDOW_W / w,
+                (((m_windowH - h) / 2) - p.y) * WINDOW_H / h
         };
     }
 

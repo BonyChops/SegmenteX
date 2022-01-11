@@ -23,7 +23,7 @@ public:
         invalid = true;
     }
 
-    KeyInput(P p, char key) {
+    KeyInput(P p, char key) : scaleAni(0.0, 1.0, 100, true) {
         type = KEY_INPUT;
         this->p = p;
         this->key = key;
@@ -42,7 +42,7 @@ public:
                 .x = p.x,
                 .y = p.y
         }));
-        rc.putSprite(bufP, scale / BLOCK_RC_SIZE);
+        rc.putSprite(bufP, scale * (float)scaleAni.play() / BLOCK_RC_SIZE);
         if(cable.getPower() != power){
             cable.changePower(power);
         }
@@ -61,6 +61,7 @@ public:
 
 private:
     Cable cable;
+    Animator scaleAni;
 };
 
 

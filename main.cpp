@@ -6,6 +6,10 @@
 #include "src/WindowManager.h"
 #include "src/KeyboardUtils.h"
 #include "src/SceneManager.h"
+#include "src/MouseUtils.h"
+#include "src/Point.h"
+
+typedef Point P;
 
 WindowManager *windowManager;
 SceneManager *sceneManager;
@@ -24,6 +28,10 @@ void Special(int, int, int);
 
 void SpecialUp(int, int, int);
 
+void Mouse(int, int, int, int);
+
+void Motion(int, int);
+
 
 int main(int argc, char **argv) {
     windowManager = new WindowManager(argc, argv);
@@ -37,6 +45,8 @@ int main(int argc, char **argv) {
     glutKeyboardUpFunc(KeyboardUp);
     glutSpecialFunc(Special);
     glutSpecialUpFunc(SpecialUp);
+    glutMouseFunc(Mouse);
+    glutMotionFunc(Motion);
     glutIgnoreKeyRepeat(GL_TRUE);
     glutSpecialFunc(Special);
     sceneManager = new SceneManager(windowManager);
@@ -64,7 +74,15 @@ void Special(int c, int x, int y) {
 
 void SpecialUp(int c, int x, int y) {
     KeyboardUtils::updateKeyboard(c, Keyboard::SPECIAL, false);
-    cout << c << endl;
+}
+
+void Mouse(int b, int s, int x, int y){
+    MouseUtils::updateKeyboard(b, Keyboard::MOUSE, s == GLUT_DOWN);
+    MouseUtils::p = ((P){(float)x, (float)y});
+}
+
+void Motion(int x, int y){
+    MouseUtils::p = ((P){(float)x, (float)y});
 }
 
 void Loop(int value) {

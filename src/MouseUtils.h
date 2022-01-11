@@ -5,10 +5,16 @@
 #ifndef PROG_GAME_MOUSEUTILS_H
 #define PROG_GAME_MOUSEUTILS_H
 
+#include "KeyboardUtils.h"
+#include "Point.h"
 
-class MouseUtils {
+typedef Point P;
 
+class MouseUtils : public KeyboardUtils{
+
+
+public:
+    static P p;
 };
-
 
 #endif //PROG_GAME_MOUSEUTILS_H

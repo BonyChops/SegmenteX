@@ -31,6 +31,10 @@ double Animator::play() {
         played = true;
         return m_end;
     }
+    if(frame == 0){
+        this->tm = TimeManager();
+        frame += 1;
+    }
     double t = ((double) frame / (double) m_maxFrame);
     frame += (this->timeMode ? tm.deltaTime() : 1);
     switch (mode) {

@@ -14,7 +14,8 @@ public:
     bool status = false;
     enum Type{
         KEY,
-        SPECIAL
+        SPECIAL,
+        MOUSE
     };
     Keyboard(int c, enum Type type, bool status){
         this->c = c;

@@ -20,7 +20,7 @@
 using namespace std;
 typedef Point P;
 
-typedef variant<Block, Segment, Cable> AllObject;
+typedef variant<Block, Segment, Cable, KeyInput> AllObject;
 
 //template<typename T, int S>
 template<int S>
@@ -70,9 +70,9 @@ public:
                     }
                 }
 
-               return new Collision(Collision::INVALID_COLLISION, (P){0, 0}, (P){0, 0});
+                return new Collision(Collision::INVALID_COLLISION, (P) {0, 0}, (P) {0, 0});
             }, objects[i]);
-            if(c->getType() != Collision::INVALID_COLLISION){
+            if (c->getType() != Collision::INVALID_COLLISION) {
                 return c;
             }
         }
@@ -122,10 +122,15 @@ public:
         return nullptr;
     }
 
-    bool CheckObject(P p){
+    bool CheckObject(P p) {
         for (int i = 0; i < objIndex; ++i) {
-            bool result = std::visit([p](auto &object) { object->p.x == p.x && object->p.y && p.y }, objects[i]);
-            if(result){
+            bool result = std::visit([p](auto &object) {
+                float fl = floor(object.p.x);
+                float ce = ceil(object.p.x + 0.1);
+                return (floor(object.p.x) <= p.x && p.x < ceil(object.p.x + 0.001) &&
+                       (floor(object.p.y) <= p.y && p.y < ceil(object.p.y + 0.001)));
+            }, objects[i]);
+            if (result) {
                 return result;
             }
         }

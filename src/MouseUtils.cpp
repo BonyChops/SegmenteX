@@ -3,3 +3,4 @@
 //
 
 #include "MouseUtils.h"
+P MouseUtils::p;
