@@ -23,6 +23,12 @@ public:
         SQUARE,
         INVALID_COLLISION
     };
+
+    enum ObjectType {
+        NONE,
+        GOAL,
+        SPIKE
+    };
     P p1 = {0, 0};
     P p2 = {0, 0};
 
@@ -30,9 +36,12 @@ public:
 
     Collision(enum Type type, P p1, P p2);
 
+    Collision(enum Type type, P p1, P p2, enum ObjectType objectType);
+
     bool CheckCollision(P p);
 
-    template<int A> array<P, A> genP() {
+    template<int A>
+    array<P, A> genP() {
         array<P, A> tmp{0};
         /*tmp[0] = (P){p1.x, p1.y};
         tmp[1] = (P){p1.x, p2.y};
@@ -86,6 +95,8 @@ public:
     enum Type getType();
 
     void updateP(P p1, P p2);
+
+    enum ObjectType objectType = NONE;
 
 private:
     enum Type type = SQUARE;

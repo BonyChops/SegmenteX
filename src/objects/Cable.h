@@ -19,6 +19,13 @@ class Cable : public Object{
 public:
     Cable(){
         invalid = true;
+        type = CABLE;
+    }
+
+    Cable(P p){
+        this->p = p;
+        invalid = true;
+        type = CABLE;
     }
 
 
@@ -30,8 +37,17 @@ public:
         cout << target->getType() << endl;
     }
 
-    void draw(function<P(P)> fp, float scale) override{
+    void draw(function<P(P)> fp, float scale, bool editorView) override{
         if(invalid || target->getType() == Object::INVALID){
+            if(editorView) {
+                Image rc = RCM::GetImage("../images/objects/cable.png");
+                //cout << scale << endl;
+                P bufP = (fp((P) {
+                        .x = p.x,
+                        .y = p.y
+                }));
+                rc.putSprite(bufP, scale * ((float) scaleAni.play()) / BLOCK_RC_SIZE);
+            }
             return;
         }
         //cout << scale << endl;
@@ -41,8 +57,8 @@ public:
         Drawer::drawLine(fp(p), fp(target->getCableSocket()));
     }
 
-    void draw(function<P(P)> fp, float scale, bool editorView){
-        draw(fp, scale);
+    void draw(function<P(P)> fp, float scale) override{
+        draw(fp, scale, false);
     }
 
     void changePower(bool power){
@@ -57,6 +73,8 @@ public:
     bool getPower(){
         return power;
     }
+
+
 
 private:
     CableAttachableObject* target;

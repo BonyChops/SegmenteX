@@ -7,6 +7,7 @@
 #include "KeyboardUtils.h"
 #include "Drawer.h"
 
+
 typedef ResourceManager RCM;
 typedef KeyboardUtils KBM;
 
@@ -17,31 +18,42 @@ Player::Player() {
 
 Player::Player(Map *map) : collision(Collision::SQUARE, (P) {p.x, p.y + 1}, (P) {p.x + 1, p.y - 1}),
                            ph(&collision, p, map) {
+    //std::srand(std::time(nullptr));
     this->map = map;
     ph = Physics(&collision, p, map);
-    ph.y.a = -0.00005;
+    ph.y.a = GRAVITY;
+    updateParticles(p);
+
 //    ph->y.v = 0.030;
 //    ph->x.v = 0.0100;
+}
+
+void Player::updateParticles(P p) {
+    for (int i = 0; i < PARTICLES; ++i) {
+        cout << "Helol" << endl;
+        //particles.at(i) = Particle(this->map, p);
+    }
 }
 
 void Player::setP(P p, bool check) {
     this->p = check ? findNearestP(p) : p;
     ph = Physics(&collision, this->p, map);
-    ph.y.a = -0.00005;
+    ph.y.a = GRAVITY;
     this->collision.p1 = {this->p.x, this->p.y + 1};
     this->collision.p2 = {this->p.x + 1, this->p.y - 1};
+    updateParticles(p);
 }
 
 P Player::findNearestP(P p) {
     if (!map->CheckCollisionWithBool(generateCollision(p))) {
         return p;
     }
-    for (int i = 1; i < SEARCH_AROUND_DISTANCE; ++i) {
+    for (float i = 0; i < SEARCH_AROUND_DISTANCE; i += 0.1) {
         for (int j = 0; j < SEARCH_AROUND_ACCURATE; ++j) {
             float angle = (2 * (float) M_PI * j / SEARCH_AROUND_ACCURATE);
             P tmpP = {
-                    p.x + (cos(angle) * i),
-                    p.y + (sin(angle) * i),
+                    round(p.x) + (cos(angle) * i),
+                    round(p.y) + (sin(angle) * i),
             };
             bool result = map->CheckCollisionWithBool(generateCollision(tmpP));
             if (!result) {
@@ -96,7 +108,21 @@ void Player::draw(function<P(P)> fp, float scale, bool skipResource, bool editor
             ph.x.v = 0;
             ph.y.v = -0.03;
         }
-        P p = this->ph.calc();
+
+        if (ph.lastCollision.objectType == Collision::GOAL){
+            ph.x.a = 0;
+            ph.x.v = 0;
+            ph.y.a = 0;
+            ph.y.v = 0;
+            clear = true;
+        }
+
+        P p = this->ph.calc(dead);
+
+        if (ph.y.x < -2 || ph.lastCollision.objectType == Collision::SPIKE) {
+            dead = true;
+        }
+
 
         this->p = p;
     } else {
@@ -117,6 +143,13 @@ void Player::draw(function<P(P)> fp, float scale, bool skipResource, bool editor
     }
     if (!skipResource) {
         drawResource(fp, scale);
+    }
+    //cout << //particles.at(0).ph.x.x << endl;
+    //cout << //particles.at(0).ph.y.x << endl;
+    for (int i = 0; i < PARTICLES; ++i) {
+        //cout << //particles[i].r << endl;
+        //cout << //particles[i].ph.y.v << endl;
+        //particles.at(i).draw(fp, scale * 100, map);
     }
 }
 

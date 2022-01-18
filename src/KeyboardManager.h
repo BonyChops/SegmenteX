@@ -12,11 +12,13 @@ typedef KeyboardUtils KBU;
 class KeyboardManager {
 public:
     KeyboardManager(char c, Keyboard::Type type);
+    KeyboardManager(char c, Keyboard::Type type, int modifier);
     bool check();
 
 protected:
     bool pressed = false;
     char c;
+    int modifier;
     Keyboard::Type type;
 };
 

@@ -10,12 +10,17 @@
 #include "Point.h"
 #include "Player.h"
 #include "KeyboardManager.h"
+#include <array>
 
 typedef Point P;
+
+#define TARGETS 3
 
 class FieldScene {
 public:
     FieldScene(WindowManager *windowManager);
+
+    FieldScene(WindowManager *windowManager, bool editorMode);
 
     ~FieldScene();
 
@@ -27,23 +32,49 @@ public:
 
     void drawGrid();
 
-    void editorHandler();
+    void editorHandler(float windowScale);
 
     void drawEditorUI(float windowScale);
 
     void editorToggleHandler();
 
+    Map map;
+
+
+    void generateFromJson(nlohmann::json &j);
+
+    Player player;
 private:
     P fieldP = {0, WINDOW_H - 20};
     WindowManager *w;
-    Map map;
     Map tmpMap;
-    Player player;
     bool editorView = false;
     bool editorMode = true;
+    bool bufSwitcher = false;
     KeyboardManager editorToggleKey;
     KeyboardManager editorClicked;
     Animator headerAni;
+    int targetObjectPos = 0;
+    AllObject objects[TARGETS];
+    Animator targetObjectAni;
+    KeyboardManager rightKey;
+    KeyboardManager leftKey;
+    KeyboardManager sKey;
+    KeyboardManager saveKey;
+    KeyboardManager loadKey;
+    Animator moveToFirstPosX;
+    Animator moveToFirstPosY;
+    bool cableEditorMode = false;
+    AllObject *cableFromObject;
+    Eraser eraser;
+
+    function<P(P)> fpl = [this](P p) {
+        return w->winP((P) {
+                .x = fieldP.x + (p.x * BLOCK_RC_SIZE),
+                .y = fieldP.y - (p.y * BLOCK_RC_SIZE)
+        });
+    };
+
 };
 
 #endif //PROG_GAME_FIELDSCENE_H

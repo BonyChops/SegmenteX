@@ -21,7 +21,7 @@ public:
     }
 
 
-    Block(P p) : Object() , scaleAni(0.0, 1.0, 100, true) {
+    Block(P p) : Object() {
         type = BLOCK;
         collisions.getCollisions()->push(Collision(Collision::SQUARE, (P) {p.x, p.y}, (P) {p.x + 1, p.y + 1}));
         this->p = p;
@@ -44,8 +44,16 @@ public:
         rc.putSprite(bufP, scale * ( (float)scaleAni.play()) / BLOCK_RC_SIZE);
     }
 
+    nlohmann::json dumpJson() override {
+        nlohmann::json data = {
+                {"type", "BLOCK"},
+                {"pos", posToJson(this->p)}
+        };
+        return data;
+    }
+
 private:
-    Animator scaleAni;
+
 
 };
 

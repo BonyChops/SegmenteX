@@ -9,14 +9,18 @@
 #include "WindowManager.h"
 #include "Drawer.h"
 #include "Point.h"
+#include <fstream>
+#include <sstream>
 
 typedef Point P;
 
 class SceneManager {
 public:
     FieldScene fieldScene;
+    FieldScene sampleFieldScene;
 
-    SceneManager(WindowManager *windowManager) : fieldScene(windowManager) {
+    SceneManager(WindowManager *windowManager) : fieldScene(windowManager), sampleFieldScene(windowManager, false) {
+        //fieldScene(windowManager);
         this->w = windowManager;
         //fieldScene = new FieldScene(windowManager);
     }
@@ -26,6 +30,33 @@ public:
     }
 
     void Draw() {
+        if (!sampleStage && KeyboardUtils::getKeyboard('y', Keyboard::KEY)) {
+            sampleStage = true;
+            sampleFieldScene.player.clear = true;
+        }
+        if (sampleFieldScene.player.clear) {
+            sampleFieldScene.player.clear = false;
+            sampleIndex += 1;
+            if (sampleIndex == 6) {
+                sampleIndex = 0;
+                sampleStage = false;
+            } else {
+
+
+                nlohmann::json j = R"(
+  {
+    "map": []
+  }
+)"_json;
+                string filename;
+                stringstream ss;
+                ss << sampleIndex;
+                cout << "../assets/maps/sample/stg" + ss.str() + ".map.json" << endl;
+                std::ifstream read_file("../assets/maps/sample/stg" + ss.str() + ".map.json");
+                read_file >> j;
+                sampleFieldScene.generateFromJson(j);
+            }
+        }
         function<void()> edgeHandler;
         float windowScale;
         if (((float) w->m_windowW / (float) WINDOW_W) < ((float) w->m_windowH / (float) WINDOW_H)) {
@@ -42,13 +73,16 @@ public:
             windowScale = (float) w->m_windowH / (float) WINDOW_H;
         }
         //cout << windowScale << endl;
-        fieldScene.Draw(windowScale);
+
+        sampleStage ? sampleFieldScene.Draw(windowScale) : fieldScene.Draw(windowScale);
         edgeHandler();
     }
 
 
 private:
     WindowManager *w;
+    bool sampleStage = false;
+    int sampleIndex = 0;
 };
 
 #endif //PROG_GAME_SCENEMANAGER_H

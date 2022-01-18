@@ -5,8 +5,11 @@
 #ifndef PROG_GAME_PLAYER_H
 #define PROG_GAME_PLAYER_H
 
+#include <array>
+
 #include "Map.h"
 #include "Physics.h"
+#include "Particle.h"
 
 class Player {
 public:
@@ -31,6 +34,8 @@ public:
 
     P findNearestP(P p);
 
+    bool dead = false;
+    bool clear = false;
 
 
 private:
@@ -39,6 +44,8 @@ private:
     function<P(P)> fp;
     bool valid = true;
     Collision generateCollision(P p);
+    //vector<Particle>  particles;
+    void updateParticles(P p);
 };
 
 

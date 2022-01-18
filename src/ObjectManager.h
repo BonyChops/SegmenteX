@@ -15,19 +15,27 @@
 #include "Point.h"
 #include <functional>
 #include "objects/Block.h"
+#include "objects/InvalidObject.h"
+#include "objects/Segment.h"
+#include "objects/Goal.h"
+#include "objects/KeyInput.h"
+#include "objects/Eraser.h"
+#include "objects/Spike.h"
 #include <variant>
+
+#include "../lib/json.hpp"
 
 using namespace std;
 typedef Point P;
 
-typedef variant<Block, Segment, Cable, KeyInput> AllObject;
+typedef variant<Block, Segment, Cable, KeyInput, InvalidObject, Goal, Eraser, Spike> AllObject;
 
 //template<typename T, int S>
 template<int S>
 class ObjectManager {
 public:
-    ObjectManager() {
-        cout << "INIT" << endl;
+    ObjectManager() : objects() {
+        cout << "INIT size: " << S << endl;
     }
 
     Collision *CheckCollision(Collision c) {
@@ -96,6 +104,7 @@ public:
     }
 
     void drawAll(function<P(P)> fp, float scale, bool editorView) {
+        //cout << editorView << endl;
         for (int i = 0; i < objIndex; ++i) {
             std::visit([fp, scale, editorView](auto &object) { object.draw(fp, scale, editorView); }, objects[i]);
             //auto *o = &objects[i];
@@ -122,19 +131,59 @@ public:
         return nullptr;
     }
 
-    bool CheckObject(P p) {
+    int CheckObjectWithIndex(P p) {
         for (int i = 0; i < objIndex; ++i) {
             bool result = std::visit([p](auto &object) {
                 float fl = floor(object.p.x);
                 float ce = ceil(object.p.x + 0.1);
                 return (floor(object.p.x) <= p.x && p.x < ceil(object.p.x + 0.001) &&
-                       (floor(object.p.y) <= p.y && p.y < ceil(object.p.y + 0.001)));
+                        (floor(object.p.y) <= p.y && p.y < ceil(object.p.y + 0.001)));
             }, objects[i]);
             if (result) {
-                return result;
+                return i;
             }
         }
-        return false;
+        return -1;
+    }
+
+    AllObject *CheckObject(P p){
+        int result = CheckObjectWithIndex(p);
+        return result != -1 ? &objects[result] : nullptr;
+    }
+
+    AllObject *CheckObject(int i){
+        bool invalid = i < 0 || i >= objIndex;
+        return (invalid ? nullptr : &objects[i]);
+    }
+
+    bool CheckObjectBool(P p) {
+        return (CheckObjectWithIndex(p) != -1);
+    }
+
+    void deleteObject(int i){
+        if(i < 0 || i >= objIndex){
+            return;
+        }
+        int j;
+        for (j = i; j < objIndex - 1; ++j) {
+            objects[j] = objects[j + 1];
+        }
+        objIndex -= 1;
+    }
+
+    nlohmann::json dumpJson() {
+        nlohmann::json dataArray = nlohmann::json::array();
+        for (int i = 0; i < objIndex; ++i) {
+            nlohmann::json data = visit([](auto o) {
+                return o.dumpJson();
+            }, objects[i]);
+            dataArray.push_back(data);
+        }
+        return dataArray;
+    }
+
+    void reset(){
+        objIndex = 0;
     }
 
 

@@ -12,6 +12,7 @@ typedef Point P;
 class CableAttachableObject : public Object{
 public:
     CableAttachableObject() : Object(){
+        type = CABLE_ATTACHABLE;
     }
     ~CableAttachableObject(){
 
@@ -36,9 +37,9 @@ public:
         return true;
     }
 
+    P cableSocket;
 protected:
     bool powers[POWERS_NUM] = {0};
-    P cableSocket;
 };
 
 

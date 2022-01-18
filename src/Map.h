@@ -12,11 +12,15 @@
 #include "CableAttachableObject.h"
 #include <functional>
 
+#include "../lib/json.hpp"
+
 using namespace std;
 
 class Map {
 public:
     Map();
+
+    //Map(nlohmann::json j);
 
     ~Map() {
         //TODO: Segmentation Fault
@@ -33,6 +37,15 @@ public:
     void addObject(AllObject object);
 
     ObjectManager<10000> objectManager;
+
+    nlohmann::json dumpJson();
+
+    void addFromJson(nlohmann::json &j);
+
+    P jsonToPos(nlohmann::json &j);
+
+    void setFromJson(nlohmann::json &j);
+
 
 private:
 //    ObjectManager<Block, 10000> *blockManager;

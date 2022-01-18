@@ -6,6 +6,7 @@
 
 Physics::Physics() {
     cerr << "NOT ALLOWED WAY TO INIT!" << endl;
+    invalid = true;
 }
 
 Physics::Physics(Collision *c, P p, Map *m) {
@@ -28,15 +29,18 @@ void Physics::getReadyForCalc(struct Params *bufX, struct Params *bufY, int dt, 
     );
 }
 
-P Physics::calc() {
+P Physics::calc(bool through) {
+    if(invalid){
+        return (P){0, 0};
+    }
     int dt = tm.deltaTime();
     return (P) {
-            calcFlow(dt, true).x,
-            calcFlow(dt, false).y
+            calcFlow(dt, true, through).x,
+            calcFlow(dt, false, through).y
     };
 }
 
-P Physics::calcFlow(int dt, bool isX) {
+P Physics::calcFlow(int dt, bool isX, bool through) {
     //TODO: Change the way to check (far -> near) to (near -> far)
     struct Params bufX;
     struct Params bufY;
@@ -44,7 +48,7 @@ P Physics::calcFlow(int dt, bool isX) {
     getReadyForCalc(&bufX, &bufY, dt, &tmpC, isX);
     Collision *collision = map->CheckCollision(tmpC);
     //If there are no collision problems
-    if ( collision->getType() == Collision::INVALID_COLLISION) {
+    if ( collision->getType() == Collision::INVALID_COLLISION || through) {
         this->x = bufX;
         this->y = bufY;
         this->collision->updateP(tmpC.p1, tmpC.p2);
@@ -53,6 +57,7 @@ P Physics::calcFlow(int dt, bool isX) {
         return getP(bufX, bufY);
     }
     //If Collided
+    lastCollision = *collision;
     for (int i = dt; i > 0; i -= COLLISION_CALC_ACCURATE) {
         //TODO: Segmentation Fault
         //delete tmpC;
@@ -62,6 +67,7 @@ P Physics::calcFlow(int dt, bool isX) {
         for (int j = 0; j < COLLISION_POINTS_ACCURATE; ++j) {
             if (collision->CheckCollision(arrayP[j])) {
                 ok = false;
+                lastCollision = *collision;
                 break;
             }
         }

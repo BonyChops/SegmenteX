@@ -7,6 +7,7 @@
 
 Animator::Animator() {
     Animator(0.0, 0.0, 0);
+    played = true;
 }
 
 Animator::Animator(double init, double end, int frame, bool timeMode) {

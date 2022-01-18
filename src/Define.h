@@ -17,10 +17,14 @@
 #define POWERS_NUM 2
 #define IMAGE_MAX 10000
 
-#define SEARCH_AROUND_ACCURATE 100
+#define SEARCH_AROUND_ACCURATE 8
 #define SEARCH_AROUND_DISTANCE 10
 
-#define DEBUG true
+#define GRAVITY -0.00005
+
+#define PARTICLES 20
+
+#define DEBUG false
 
 #define SHIFT_KEY 112
 #endif //PROG_GAME_DEFINE_H

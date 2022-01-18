@@ -18,7 +18,7 @@ public:
     }
 
 
-    Segment(P p) : CableAttachableObject() {
+    Segment(P p) : CableAttachableObject(){
         type = SEGMENT;
         this->p = p;
         cableAttachable = true;
@@ -26,18 +26,20 @@ public:
                 p.x + (float) 0.5,
                 p.y - (float) 0.5
         };
+        cableExportable = true;
         cout << "I am " << this << endl;
+        cable = Cable(cableSocket);
     }
 
-    void draw(function<P(P)> fp, float scale, bool editorView){
-        draw(fp, scale);
+    void draw(function<P(P)> fp, float scale){
+        draw(fp, scale, false);
     }
 
     ~Segment() {
     }
 
-    void draw(function<P(P)> fp, float scale) override {
-        cable.draw(fp, scale);
+    void draw(function<P(P)> fp, float scale, bool editorView) override {
+        cable.draw(fp, scale, editorView);
         Image rc = powers[0] ?
                    RCM::GetImage("../images/objects/segment_on.png") :
                    RCM::GetImage("../images/objects/segment.png");
@@ -49,7 +51,7 @@ public:
                 .x = p.x,
                 .y = p.y
         }));
-        rc.putSprite(bufP, scale / BLOCK_RC_SIZE);
+        rc.putSprite(bufP, scale * (float)scaleAni.play()/ BLOCK_RC_SIZE);
     }
 
     void changePower(bool power) override {
@@ -62,8 +64,21 @@ public:
         cable = Cable(cablePos, object);
     }
 
-private:
+    void setCablePos(P p) override{
+        tmpObj = CableAttachableObject();
+        tmpObj.p = p;
+        tmpObj.cableSocket = p;
+        cout << tmpObj.getType() << endl;
+        cable = Cable(cableSocket, &tmpObj);
+    }
+
+    void resetCable() override{
+        cable = Cable();
+    }
+
     Cable cable;
+private:
+    CableAttachableObject tmpObj;
 };
 
 #endif //PROG_GAME_SEGMENT_H

@@ -4,7 +4,7 @@
 
 #include "Map.h"
 
-Map::Map() {
+Map::Map() : objectManager(){
     /*
     blockManager = new ObjectManager<Block, 10000>;
     keyInputManager = new ObjectManager<KeyInput, 10000>;
@@ -28,11 +28,51 @@ Map::Map() {
         blockManager->addObject(Block((P) {(float)i, (float)-i}));
     }
     */
-    objectManager = ObjectManager<10000>();
-    for (int i = 0; i < 10; ++i) {
-        objectManager.addObject(Block((P){(float)i, (float)i}));
+
+    //objectManager = ObjectManager<10000>();
+
+
+    for (int i = 0; i < 20; ++i) {
+        objectManager.addObject(Block((P){(float)i, (float)1}));
     }
 }
+
+/*Map::Map(nlohmann::json j) : objectManager() {
+    nlohmann::json map = j["map"];
+    for (nlohmann::json::iterator it = map.begin(); it != map.end(); ++it) {
+        addFromJson(*it);
+    }
+}*/
+
+void Map::setFromJson(nlohmann::json &j) {
+    objectManager.reset();
+    auto map = j["map"];
+    int i = 0;
+    for (nlohmann::json::iterator it = map.begin(); it != map.end(); ++it) {
+        addFromJson(*it);
+        i += 1;
+    }
+}
+
+void Map::addFromJson(nlohmann::json &j) {
+    string type = j["type"];
+    if(type == "BLOCK"){
+        objectManager.addObject(Block(jsonToPos(j["pos"])));
+    }else if(type == "SPIKE"){
+        objectManager.addObject(Spike(jsonToPos(j["pos"])));
+    }else if(type == "GOAL"){
+        objectManager.addObject(Goal(jsonToPos(j["pos"])));
+    }
+}
+
+P Map::jsonToPos(nlohmann::json &j) {
+    return (P){
+        j["x"],
+        j["y"]
+    };
+}
+
+
 
 void Map::drawAll(function<P(P)> fp, float scale, bool editorView) {
     //cout << scale << endl;
@@ -60,4 +100,12 @@ bool Map::CheckCollisionWithBool(Collision c) {
 
 void Map::addObject(AllObject object) {
     objectManager.addObject(object);
+}
+
+nlohmann::json Map::dumpJson() {
+    nlohmann::json mapArray = objectManager.dumpJson();
+    nlohmann::json data = {
+            {"map", mapArray}
+    };
+    return data;
 }

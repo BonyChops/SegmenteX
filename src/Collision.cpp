@@ -8,10 +8,13 @@ Collision::Collision() {
     Collision(INVALID_COLLISION, (P) {0, 0}, (P) {0, 0});
 }
 
-Collision::Collision(enum Type type, P p1, P p2) {
+Collision::Collision(enum Type type, P p1, P p2) : Collision(type, p1, p2, NONE) {}
+
+Collision::Collision(enum Type type, P p1, P p2, enum ObjectType objectType) {
     this->type = type;
     this->p1 = p1;
     this->p2 = p2;
+    this->objectType = objectType;
 }
 
 bool Collision::CheckCollision(P p) {

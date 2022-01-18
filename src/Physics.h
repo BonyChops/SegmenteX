@@ -32,15 +32,19 @@ public:
 
     P getP(struct Params x, struct Params y);
 
-    P calc();
+    P calc(bool through);
 
+    Map *map;
+
+    bool invalid = false;
+
+    Collision lastCollision;
 private:
     void updateCollision(bool isX, P p1, P p2, Collision *collision);
-    P calcFlow(int dt, bool ixX);
+    P calcFlow(int dt, bool ixX, bool through);
     void calcParam(struct Params *params, float dt);
     void getReadyForCalc(struct Params *bufX, struct Params *bufY, int dt, Collision *tmpC, bool isX);
     TimeManager tm;
-    Map *map;
 };
 
 

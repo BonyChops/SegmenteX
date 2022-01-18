@@ -23,16 +23,23 @@ public:
         invalid = true;
     }
 
-    KeyInput(P p, char key) : scaleAni(0.0, 1.0, 100, true) {
+    KeyInput(P p, char key){
+        cableExportable = true;
         type = KEY_INPUT;
         this->p = p;
         this->key = key;
+        cableSocket = (P) {
+                p.x + (float) 0.5,
+                p.y - (float) 0.5
+        };
+        cable = Cable(cableSocket);
     }
 
     ~KeyInput() {
     }
 
-    void draw(function<P(P)> fp, float scale) override {
+    void draw(function<P(P)> fp, float scale, bool editorView) override {
+        cable.draw(fp, scale, editorView);
         bool power = KBM::getKeyboard(key, Keyboard::KEY);
         Image rc = power ?
                    RCM::GetImage("../images/objects/keyboard/" + string(1, key) + "_pressed.png") :
@@ -46,11 +53,10 @@ public:
         if(cable.getPower() != power){
             cable.changePower(power);
         }
-        cable.draw(fp, scale);
     }
 
-    void draw(function<P(P)> fp, float scale, bool editorView){
-        draw(fp, scale);
+    void draw(function<P(P)> fp, float scale){
+        draw(fp, scale, false);
     }
 
     void attachCable(CableAttachableObject *object) {
@@ -58,10 +64,24 @@ public:
         cable = Cable(cablePos, object);
     }
 
+    void setCablePos(P p) override{
+        tmpObj = CableAttachableObject();
+        tmpObj.p = p;
+        tmpObj.cableSocket = p;
+        cout << tmpObj.getType() << endl;
+        cable = Cable(cableSocket, &tmpObj);
+    }
 
+    void resetCable() override{
+        cable = Cable();
+    }
+
+
+    P cableSocket;
 private:
     Cable cable;
-    Animator scaleAni;
+    CableAttachableObject tmpObj;
+
 };
 
 

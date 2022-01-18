@@ -13,7 +13,9 @@ typedef Point P;
 
 WindowManager *windowManager;
 SceneManager *sceneManager;
+//array<AllObject, 10> objects = array<AllObject, 10>();
 
+ObjectManager<10000> objectManager = ObjectManager<10000>();
 using namespace std;
 
 void Display(void);
@@ -35,7 +37,7 @@ void Motion(int, int);
 
 int main(int argc, char **argv) {
     windowManager = new WindowManager(argc, argv);
-    windowManager->setWindowTitle("Clock");
+    windowManager->setWindowTitle("SegmenteX Alpha");
     WindowManager::setBufWindowManager(windowManager);
     windowManager->setWindowSize(WINDOW_W, WINDOW_H);
     windowManager->InitDisplay(argc, argv);
@@ -50,6 +52,11 @@ int main(int argc, char **argv) {
     glutIgnoreKeyRepeat(GL_TRUE);
     glutSpecialFunc(Special);
     sceneManager = new SceneManager(windowManager);
+    //FieldScene fieldScene = FieldScene(windowManager);
+    //InvalidObject invTest = InvalidObject();
+    objectManager.CheckObjectBool((P) {0, 0});
+
+    //ObjectManager<10000> objectManager2 = ObjectManager<10000>();
     windowManager->Start();
     return 0;
 }
@@ -61,28 +68,31 @@ void Display() {
 }
 
 void Keyboard(unsigned char c, int x, int y) {
-    KeyboardUtils::updateKeyboard((int) c, Keyboard::KEY, true);
+    int modifier = glutGetModifiers();
+    KeyboardUtils::updateKeyboard((int) c + (modifier == 0 ? modifier : ('a' - 1)), Keyboard::KEY, true, modifier);
 }
 
 void KeyboardUp(unsigned char c, int x, int y) {
-    KeyboardUtils::updateKeyboard((int) c, Keyboard::KEY, false);
+
+    int modifier = glutGetModifiers();
+    KeyboardUtils::updateKeyboard((int) c + (modifier == 0 ? modifier : ('a' - 1)), Keyboard::KEY, false, modifier);
 }
 
 void Special(int c, int x, int y) {
-    KeyboardUtils::updateKeyboard(c, Keyboard::SPECIAL, true);
+    KeyboardUtils::updateKeyboard(c, Keyboard::SPECIAL, true, 0);
 }
 
 void SpecialUp(int c, int x, int y) {
-    KeyboardUtils::updateKeyboard(c, Keyboard::SPECIAL, false);
+    KeyboardUtils::updateKeyboard(c, Keyboard::SPECIAL, false, 0);
 }
 
-void Mouse(int b, int s, int x, int y){
-    MouseUtils::updateKeyboard(b, Keyboard::MOUSE, s == GLUT_DOWN);
-    MouseUtils::p = ((P){(float)x, (float)y});
+void Mouse(int b, int s, int x, int y) {
+    MouseUtils::updateKeyboard(b, Keyboard::MOUSE, s == GLUT_DOWN, 0);
+    MouseUtils::p = ((P) {(float) x, (float) y});
 }
 
-void Motion(int x, int y){
-    MouseUtils::p = ((P){(float)x, (float)y});
+void Motion(int x, int y) {
+    MouseUtils::p = ((P) {(float) x, (float) y});
 }
 
 void Loop(int value) {

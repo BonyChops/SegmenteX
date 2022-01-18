@@ -17,6 +17,7 @@ public:
     }
 
     void draw(function<P(P)> fp, float scale) override {}
+    void draw(function<P(P)> fp, float scale, bool editorView) override {}
 
     void changePower(bool power) {}
 

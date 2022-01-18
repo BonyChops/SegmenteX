@@ -17,10 +17,13 @@ public:
         SPECIAL,
         MOUSE
     };
-    Keyboard(int c, enum Type type, bool status){
+
+    int modifier;
+    Keyboard(int c, enum Type type, bool status, int modifier){
         this->c = c;
         this->status = status;
         this->type = type;
+        this->modifier = modifier;
     }
 
     int getC(){
